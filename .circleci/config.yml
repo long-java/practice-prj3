@@ -27,7 +27,7 @@ jobs:
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello # job1
-      - print_world # job2
+      - say-hello
+      - print_world
         requires:
           - say-hello
