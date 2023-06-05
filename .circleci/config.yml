@@ -8,13 +8,18 @@ jobs:
   say-hello:
     docker:
       - image: cimg/base:stable
+    environment:
+      TEST: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    working_directory: ~/main
     steps:
       - checkout
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
+      - run: echo "This is pipeline ID << pipeline.id >>"
+      - run: echo $TEST
 
-  print_world:
+  print-world:
     docker:
       - image: circleci/node:13.8.0
     steps:
@@ -28,5 +33,5 @@ workflows:
   say-hello-workflow:
     jobs:
       - say-hello
-      - print_world:
-          requires: [say-hello]
+      # - print-world:
+      #     requires: [say-hello]
