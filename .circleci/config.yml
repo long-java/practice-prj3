@@ -18,6 +18,7 @@ jobs:
           command: "echo Hello, World!"
       - run: echo "This is pipeline ID << pipeline.id >>"
       - run: echo $TEST
+      - run: echo $MY_ENV_VAR
 
   print-world:
     docker:
