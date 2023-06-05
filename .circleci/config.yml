@@ -7,7 +7,7 @@ version: 2.1
 jobs:
   say-hello:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:2020.01
     environment:
       TEST: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     working_directory: ~/main
@@ -15,7 +15,7 @@ jobs:
       - checkout
       - run:
           name: "Say hello"
-          command: "echo Hello, World!"
+          command: echo $MY_ENV_VAR
       - run: echo "This is pipeline ID << pipeline.id >>"
       - run: echo $TEST
       - run: echo $MY_ENV_VAR
