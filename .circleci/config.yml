@@ -77,14 +77,14 @@ commands:
       - run: echo << parameters.id >>
 
 jobs:
-  my_job:
+  job1:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - print_pipeline_id:
-        id: << pipeline.id >>
+          id: << pipeline.id >>
 
 workflows:
-  my_workflow:
+  my_workflow_1:
     jobs:
-      - my_job
+      - job1
