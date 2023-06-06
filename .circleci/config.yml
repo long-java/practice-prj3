@@ -68,23 +68,39 @@ version: 2.1
 
 
 
-commands:
-  print_pipeline_id:
-    parameters:
-      id:
-        type: string
-    steps:
-      - run: echo << parameters.id >>
+# commands:
+#   print_pipeline_id:
+#     parameters:
+#       id:
+#         type: string
+#     steps:
+#       - run: echo << parameters.id >>
+
+# jobs:
+#   job1:
+#     docker:
+#       - image: circleci/node:13.8.0
+#     steps:
+#       - print_pipeline_id:
+#           id: test param nek
+
+# workflows:
+#   my_workflow_1:
+#     jobs:
+#       - job1
+
+
 
 jobs:
-  job1:
+  jobFailed:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - print_pipeline_id:
-          id: test param nek
+      - run: return 1
+      when: on_fail
+      command: echo "failed" 
 
 workflows:
   my_workflow_1:
     jobs:
-      - job1
+      - jobFailed
