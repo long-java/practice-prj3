@@ -98,8 +98,8 @@ jobs:
     steps:
       - run: exit 1
       - run:
+        command: echo "failed"
         when: on_fail
-        command: echo "failed" 
 
 workflows:
   my_workflow_1:
