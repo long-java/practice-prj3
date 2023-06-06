@@ -4,35 +4,64 @@ version: 2.1
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
-jobs:
-  say-hello:
-    docker:
-      - image: cimg/base:2020.01
-    environment:
-      TEST: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    working_directory: ~/main
-    steps:
-      - checkout
-      - run:
-          name: "Say hello"
-          command: echo $MY_ENV_VAR
-      - run: echo "This is pipeline ID << pipeline.id >>"
-      - run: echo $TEST
-      - run: echo $MY_ENV_VAR
+# jobs:
+#   say-hello:
+#     docker:
+#       - image: cimg/base:2020.01
+#     environment:
+#       TEST: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+#     working_directory: ~/main
+#     steps:
+#       - checkout
+#       - run:
+#           name: "Say hello"
+#           command: echo $MY_ENV_VAR
+#       - run: echo "This is pipeline ID << pipeline.id >>"
+#       - run: echo $TEST
+#       - run: echo $MY_ENV_VAR
 
-  print-world:
+#   print-world:
+#     docker:
+#       - image: circleci/node:13.8.0
+#     steps:
+#       - checkout
+#       - run:
+#           name: "Print hello Long"
+#           command: "echo Hello Long!"
+
+# # See: https://circleci.com/docs/configuration-reference/#workflows
+# workflows:
+#   say-hello-workflow:
+#     jobs:
+#       - say-hello
+#       # - print-world:
+#       #     requires: [say-hello]
+
+
+
+jobs:
+  save_hello_world_output:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - checkout
-      - run:
-          name: "Print hello Long"
-          command: "echo Hello Long!"
+      - run: echo "hello world" > ~/output.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output.txt
 
-# See: https://circleci.com/docs/configuration-reference/#workflows
+  print_output_file:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - attach_workspace:
+          at: ~/
+      - run: cat ~/output.txt
+
 workflows:
-  say-hello-workflow:
+  my_workflow:
     jobs:
-      - say-hello
-      # - print-world:
-      #     requires: [say-hello]
+      - save_hello_world_output
+      - print_output_file:
+          requires:
+            - save_hello_world_output
